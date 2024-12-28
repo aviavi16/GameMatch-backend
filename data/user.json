@@ -1,0 +1,59 @@
+[
+  {
+    "_id": "9bQv2",
+    "password": 0,
+    "score": null,
+    "img": "https://instoremag.com/wp-content/uploads/2021/10/ins-RetailDogMeme2.jpg",
+    "createdAt": 123123321,
+    "isAdmin": true
+  },
+  {
+    "fullname": "Muki6 Ja",
+    "username": "trrrrrrrrrrrry me!",
+    "password": 2341232134234,
+    "score": 2342342,
+    "_id": "XI97p",
+    "img": "https://m.media-amazon.com/images/I/91ZhFnr13LL.png",
+    "createdAt": 123123322,
+    "isAdmin": false
+  },
+  {
+    "username": "ttttttttttt",
+    "password": 23432423,
+    "score": null,
+    "_id": "2VMIh",
+    "img": "https://www.klenty.com/blog/wp-content/uploads/2023/11/sales-memes-from-the-office.webp",
+    "createdAt": 123123323,
+    "isAdmin": false
+  },
+  {
+    "_id": "g4K4u",
+    "username": "password is easy!",
+    "fullname": "look inside your brain3",
+    "password": "$2b$10$KPkk5KCcchlxpjwFccYDiuYWLsncFcLNtpd4iGMBvhURfVgi5xdea",
+    "score": 10000,
+    "img": "https://static8.depositphotos.com/1007989/894/i/450/depositphotos_8943042-stock-photo-okay-smiley.jpg",
+    "createdAt": 1730191809384,
+    "isAdmin": false
+  },
+  {
+    "_id": "F2dG4",
+    "username": "avinoam",
+    "fullname": "avinoam",
+    "password": "$2b$10$HVsAmsS088X82MSSPJQGO.sW1I/cg3RkRV4MKYa27WvXVlICiNAD.",
+    "score": 10000,
+    "img": "https://static8.depositphotos.com/1007989/894/i/450/depositphotos_8943042-stock-photo-okay-smiley.jpg",
+    "createdAt": 1730207749648,
+    "isAdmin": false
+  },
+  {
+    "_id": "rynA9",
+    "username": "avinoam2",
+    "fullname": "avi xxm",
+    "password": "$2b$10$BkSoekZAjg0EwJWrDmYcTeK7AB4cmgTZgak0/AHxLqgRVofCZH1ba",
+    "score": 10000,
+    "img": "https://static8.depositphotos.com/1007989/894/i/450/depositphotos_8943042-stock-photo-okay-smiley.jpg",
+    "createdAt": 1730466758004,
+    "isAdmin": false
+  }
+]

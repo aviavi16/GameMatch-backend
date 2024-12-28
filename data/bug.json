@@ -1,0 +1,42 @@
+[
+  {
+    "title": "you don't know!",
+    "severity": 32,
+    "createdAt": null,
+    "owner": {
+      "_id": "XI97p",
+      "fullname": "Muki6 Ja",
+      "img": "https://m.media-amazon.com/images/I/91ZhFnr13LL.png",
+      "score": 2342342,
+      "isAdmin": false
+    },
+    "_id": "M7xNU"
+  },
+  {
+    "title": "testing my auth",
+    "severity": 2,
+    "createdAt": null,
+    "owner": {
+      "_id": "XI97p",
+      "fullname": "Muki6 Ja",
+      "img": "https://m.media-amazon.com/images/I/91ZhFnr13LL.png",
+      "score": 2342342,
+      "isAdmin": false
+    },
+    "_id": "OSyvE"
+  },
+  {
+    "title": "this should work",
+    "description": "asdsad",
+    "severity": 8,
+    "createdAt": 0,
+    "owner": {
+      "_id": "F2dG4",
+      "fullname": "avinoam",
+      "img": "https://static8.depositphotos.com/1007989/894/i/450/depositphotos_8943042-stock-photo-okay-smiley.jpg",
+      "score": 10000,
+      "isAdmin": false
+    },
+    "_id": "OABfJ"
+  }
+]
