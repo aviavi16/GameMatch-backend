@@ -17,17 +17,15 @@ async function login(username, password) {
     loggerService.debug(`auth.service - login with username: ${username}`)
 
     const user = await userService.getByUsername(username)
-    if (!user) return Promise.reject('Invalid username or password')
+    if (!user) throw new Error('Invalid username or password')
     
     //TODO also check password
     const { _id, fullname, img, score, isAdmin } = user
 
     const miniUser = {
         _id: _id.toString(),
-        fullname,
-        img,
-        score,
-        isAdmin
+        username,
+        bggUser : user.bggUser,
     }
 
     return miniUser
@@ -37,22 +35,22 @@ async function login(username, password) {
     // }
 }
 
-async function signup(username, password, fullname, img, score) {
+async function signup(username, password, bggUser) {
 
     try {
         const saltRounds = 10
-        if (!username || !password || !fullname) {
+        if (!username || !password ) {
             loggerService.info('Missing credentials, should have been spotted at frontend')
             throw 'Missing required signup info'
         }
 
-        loggerService.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
+        loggerService.debug(`auth.service - signup with username: ${username}, bggUser: ${bggUser}`)
 
         const userExist = await userService.getByUsername(username)
         if (userExist) throw 'Username already taken'
 
         const hash = await bcrypt.hash(password, saltRounds)
-        return userService.add({ username, password: hash, fullname, img, score })
+        return userService.add({ username, password: hash, bggUser })
 
     } catch (err) {
         loggerService.error("Could not sign up", err)

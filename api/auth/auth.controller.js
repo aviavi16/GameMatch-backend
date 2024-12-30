@@ -17,16 +17,16 @@ export async function login(req, res) {
         res.json(user)
     } catch (err) {
         loggerService.error(' Failed to Login ', err)
-        res.status(401).send('Failed to Login')
+		res.status(401).send( err)
     }
 }
 
 export async function signup(req, res) {
     try {
-        const { username, password, fullname, img, score } = req.body
-        loggerService.debug(username)
+        const { username, password, bggUser } = req.body
+        loggerService.debug(username, " the bgg username is: ", bggUser)
 
-        const account = await authService.signup(username, password, fullname, img, score)
+        const account = await authService.signup(username, password, bggUser)
         loggerService.debug(`auth.route (controller) - new account:` + JSON.stringify(account))
 
         const user = await authService.login(username, password)

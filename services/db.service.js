@@ -21,6 +21,8 @@ async function _connect(){
     if ( dbConnection) return dbConnection
     try {
         const client = await MongoClient.connect( config.dbURL )
+        console.log('config.dbURL:', config.dbURL)
+        console.log('config.dbName:', config.dbName)
         return dbConnection = client.db(config.dbName)
     } catch (err) {
        console.log("Cannot connect to DB", err)

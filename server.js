@@ -28,8 +28,8 @@ app.use( cors ( coreOptions ))
 import {userRoutes} from './api/user/user.routes.js'
 app.use('/api/user', userRoutes )
 
-// import {authRoutes} from './api/auth/auth.routes.js'
-// app.use('/api/auth', authRoutes )
+import {authRoutes} from './api/auth/auth.routes.js'
+app.use('/api/auth', authRoutes )
 
 // import {msgRoutes} from './api/msg/msg.routes.js'
 // app.use('/api/msg', msgRoutes )
