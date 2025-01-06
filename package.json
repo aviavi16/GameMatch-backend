@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server:dev": "nodemon --ignore \"./data\" server.js",
-    "server:prod": "set NODE_ENV=production & nodemon --ignore \"./data\" server.js"
+    "server:prod": "set NODE_ENV=production & nodemon --ignore \"./data\" server.js",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
