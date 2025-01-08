@@ -176,7 +176,10 @@ async function fetchGameById( gameId ) {
     try {
         const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/thing?id=${gameId}`);
         console.log('res:', res)
-        if (!res.ok) throw new Error(`Failed to fetch data from ${url}`);
+        if (!res.ok) {
+            loggerService.error('Failed to fetchGameById');
+            throw new Error(`Failed to fetch data from ${url}`);
+        }
         const data = await res.text();
         return data;
     } catch (err) {

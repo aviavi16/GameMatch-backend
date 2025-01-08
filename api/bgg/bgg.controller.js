@@ -33,10 +33,11 @@ export async function getGameByName(req, res) {
     const { gameTitle } = req.params;
     try {
         const gameData = await bggService.fetchGameByTitle(gameTitle);
+        loggerService.debug( `getGameByName from bgg api succesfully`)
         res.send(gameData);
     } catch (err) {
-        loggerService.error("Cannot get GameByTitle", err);
-        return res.status(400).send("Cannot get GameByTitle");
+        loggerService.error("Cannot get getGameByName", err);
+        return res.status(400).send("Cannot get getGameByName");
     }
 }
 
@@ -45,6 +46,7 @@ export async function getGameById(req, res) {
     const { gameId } = req.params;
     try {
         const gameData = await bggService.fetchGameById(gameId);
+        loggerService.debug( `getGameById from bgg api succesfully`)
         res.send(gameData);
     } catch (err) {
         loggerService.error("Cannot get fetchGameById", err);
