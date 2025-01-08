@@ -1,11 +1,15 @@
 
 import fs from 'fs'
+import { Parser } from 'xml2js'
+
 export const utilService = {
     makeId,
     saveToStorage,
     loadFromStorage,
     readJsonFile, 
     writeJsonFile,
+    getHottestCollectionFromXml,
+    getUserCollectionFromXml
 }
 
 function makeId(length = 5) {
@@ -41,7 +45,51 @@ function writeJsonFile ( path , data ){
             reslove()
         })
     })
+}
 
+export async function getHottestCollectionFromXml(hottestXml) {
+    const parser = new Parser({ explicitArray: false, attrkey: '$' });
+    let res = [];
+
+    try {
+        const parsedData = await parser.parseStringPromise(hottestXml);
+
+        const items = parsedData.items.item; // Adjust based on actual XML structure
+
+        items.forEach(item => {
+            const gameObject = {
+                name: item.name.$.value,
+                id: item.$.id,
+            };
+            res.push(gameObject);
+        });
+
+    } catch (error) {
+        console.error('Error parsing XML:', error);
+    }
+    return res;
+}
+
+export async function getUserCollectionFromXml( userCollectionXml ) {
+    const parser = new Parser({ explicitArray: false, attrkey: '$' });
+    let res = [];
+
+    try {
+        const parsedData = await parser.parseStringPromise(userCollectionXml);
+
+        const items = parsedData.items.item; // Adjust based on actual XML structure
+        items.forEach(item => {
+            const gameObject = {
+                name: item.name._, // Get the name value
+                id: item.$.objectid, // Get the object ID
+            };
+            res.push(gameObject);
+        });
+
+    } catch (error) {
+        console.error('Error parsing XML:', error);
+    }
+    return res;
 }
 
 export function getExistingProperties(obj){
@@ -63,3 +111,4 @@ export function debounce( func , time ){
         }, time )
     }
 }
+

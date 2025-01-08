@@ -31,8 +31,8 @@ app.use('/api/user', userRoutes )
 import {authRoutes} from './api/auth/auth.routes.js'
 app.use('/api/auth', authRoutes )
 
-// import {msgRoutes} from './api/msg/msg.routes.js'
-// app.use('/api/msg', msgRoutes )
+import {bggRoutes} from './api/bgg/bgg.routes.js'
+app.use('/api/bgg', bggRoutes )
 
 const port = process.env.PORT || 3030
 
