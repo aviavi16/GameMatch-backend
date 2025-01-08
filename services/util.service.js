@@ -83,14 +83,12 @@ export async function getUserCollectionFromXml( userCollectionXml ) {
                 name: item.name._, // Get the name value
                 id: item.$.objectid, // Get the object ID
             };
-            console.log('gameObject:', gameObject)
             res.push(gameObject);
         });
 
     } catch (error) {
         console.error('Error parsing XML:', error);
     }
-    console.log('res:', res)
     return res;
 }
 

@@ -14,6 +14,15 @@ export async function getBGGHottest(req, res) {
     }
 }
 
+export async function addLog(req, res) {
+    try {
+        loggerService.debug( ` a log from frontend was sent`)
+    } catch (err) {
+        loggerService.error("Cannot get addLog", err);
+        return res.status(400).send("Cannot addLog");
+    }
+}
+
 export async function getBGGCollection(req, res) {
 
     const { username } = req.params;
@@ -46,7 +55,7 @@ export async function getGameById(req, res) {
     const { gameId } = req.params;
     try {
         const gameData = await bggService.fetchGameById(gameId);
-        loggerService.debug( `getGameById from bgg api succesfully`)
+        loggerService.debug( `getGameByName from bgg api succesfully`)
         res.send(gameData);
     } catch (err) {
         loggerService.error("Cannot get fetchGameById", err);

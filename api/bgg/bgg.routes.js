@@ -8,6 +8,7 @@ import {
     addBGGNote, 
     removeBGGNote ,
     getGameById,
+    addLog,
 } from './bgg.controller.js'
 import { requireAuth } from '../../middlewares/require-auth.middleware.js';
 
@@ -15,6 +16,7 @@ const router = express.Router();
 
 // CRUD for BGG items
 router.get('/hottest', getBGGHottest); // Fetch all collections
+router.get('/log', addLog); // Fetch all collections
 router.get('/search/:gameId', getGameById);
 router.get('/:username', getBGGCollection);
 router.post('/', requireAuth, addBGGItem); // Add a new item
