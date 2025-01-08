@@ -153,7 +153,10 @@ async function fetchBGGData(username) {
 
 async function fetchBGGHottest() {
     try {
+        loggerService.debug('fetchBGGHottest');
+
         const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/hot?boardgame`);
+        loggerService.debug(res);
         if (!res.ok){
             loggerService.error('ailed to fetchBGGHottest');
              throw new Error(`Failed to fetchBGGHottest ${url}`);
