@@ -139,7 +139,10 @@ async function removeBugNote(bugId, noteId) {
 async function fetchBGGData(username) {
     try {
         const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`);
-        if (!res.ok) throw new Error(`Failed to fetch data from ${url}`);
+        if (!res.ok){
+            loggerService.error('Failed to fetch data from');
+             throw new Error(`Failed to fetch data from ${url}`);
+        }
         const data = await res.text();
         return data;
     } catch (err) {
@@ -151,12 +154,15 @@ async function fetchBGGData(username) {
 async function fetchBGGHottest() {
     try {
         const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/hot?boardgame`);
-        if (!res.ok) throw new Error(`Failed to fetch data from ${url}`);
+        if (!res.ok){
+            loggerService.error('ailed to fetchBGGHottest');
+             throw new Error(`Failed to fetchBGGHottest ${url}`);
+        }
         const data = await res.text();
         return data;
     } catch (err) {
-        loggerService.error('Failed to fetch BGG data', err);
-        throw new Error('Could not fetch BGG data');
+        loggerService.error('Failed to fetchBGGHottest', err);
+        throw new Error('Failed to fetchBGGHottest');
     }
 }
 
