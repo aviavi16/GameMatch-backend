@@ -1,3 +1,4 @@
+import { bggApiService } from "../../services/bgg.service.js";
 import { loggerService } from "../../services/logger.service.js";
 import { utilService } from "../../services/util.service.js";
 import { bggService } from "./bgg.service.js";
@@ -6,8 +7,9 @@ export async function getBGGHottest(req, res) {
     try {
         const collection = await bggService.fetchBGGHottest();
         loggerService.debug( `hottest collection was fetched from bgg api succesfully`)
-        var collectionsArray = await utilService.getHottestCollectionFromXml(collection)
-        res.send(collectionsArray);
+        var collectionsArray = await utilService.getHottestCollectionFromXml(collection, 31)
+        const boardGamesHottest = await bggService.fetchImageByIds(collectionsArray)
+        res.send(boardGamesHottest);
     } catch (err) {
         loggerService.error("Cannot get BGG Hottest collections", err);
         return res.status(400).send("Cannot get BGG Hottest collections");
@@ -60,6 +62,21 @@ export async function getGameById(req, res) {
     } catch (err) {
         loggerService.error("Cannot get fetchGameById", err);
         return res.status(400).send("Cannot get fetchGameById");
+    }
+}
+
+export async function getImageById(req, res) {
+
+    const { gameIds } = req.params;
+    const gameIdArray = gameIds.split(',').map((id) => id.trim());
+
+    loggerService.debug("gameIdArray is: ", gameIdArray);
+    try {
+        const url = await bggService.fetchImageByIds(gameIdArray);
+        res.send(url);
+    } catch (err) {
+        loggerService.error("Cannot get getImageById", err);
+        return res.status(400).send("Cannot get getImageById");
     }
 }
 

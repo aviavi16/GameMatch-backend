@@ -47,21 +47,23 @@ function writeJsonFile ( path , data ){
     })
 }
 
-export async function getHottestCollectionFromXml(hottestXml) {
+export async function getHottestCollectionFromXml(hottestXml, limit) {
     const parser = new Parser({ explicitArray: false, attrkey: '$' });
     let res = [];
-
+    var counter = 0;
     try {
         const parsedData = await parser.parseStringPromise(hottestXml);
 
         const items = parsedData.items.item; // Adjust based on actual XML structure
 
-        items.forEach(item => {
-            const gameObject = {
-                name: item.name.$.value,
-                id: item.$.id,
-            };
-            res.push(gameObject);
+        items.every(item => {
+            counter++
+            if(limit === counter ) return false
+            else{
+                res.push( item.$.id);
+                return true;
+            }
+           
         });
 
     } catch (error) {

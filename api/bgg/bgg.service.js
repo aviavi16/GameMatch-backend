@@ -15,7 +15,8 @@ export const bggService = {
     fetchBGGData,
     fetchBGGHottest,
     fetchGameByTitle,
-    fetchGameById
+    fetchGameById,
+    fetchImageByIds,
 };
 
 const PAGE_SIZE = 2;
@@ -183,7 +184,7 @@ async function fetchGameByTitle( gameTitle ) {
 
 async function fetchGameById( gameId ) {
     try {
-        const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/thing?id=${gameId}`);
+        const res = await fetch(`https://www.boardgamegeek.com/xmlapi2/thing?id=${gameId}&exact=1`);
         console.log('res:', res)
         if (!res.ok) {
             loggerService.error('Failed to fetchGameById');
@@ -193,6 +194,40 @@ async function fetchGameById( gameId ) {
         return data;
     } catch (err) {
         loggerService.error('Failed to fetch BGG data', err);
+        throw new Error('Could not fetch BGG data');
+    }
+}
+
+async function fetchImageByIds( gameIds ) {
+    try {
+        // Fetch details for all game IDs concurrently
+        const requests = gameIds.map(async (gameId) => {
+            const url = `https://www.boardgamegeek.com/xmlapi2/thing?id=${gameId}&exact=1`;
+            const res = await fetch(url);
+
+            if (!res.ok) {
+                console.error(`Failed to fetch data for game ID: ${gameId}`);
+                return { id: gameId, name: null, image: null }; // Return null values on failure
+            }
+
+            const data = await res.text();
+            // Extract the image URL using regex
+            const imageMatch = data.match(/<image>(.*?)<\/image>/);
+            const image = imageMatch ? imageMatch[1] : null;
+
+            // Extract the primary name
+            const nameMatch = data.match(/<name type="primary"[^>]*value="([^"]+)"/);
+            const name = nameMatch ? nameMatch[1] : "Unknown";
+
+            return { id: gameId, name, image };
+        });
+
+        // Wait for all requests to complete
+        const results = await Promise.all(requests);
+
+        return results; // Return the array of objects
+    } catch (err) {
+        console.error('Failed to fetch BGG data', err);
         throw new Error('Could not fetch BGG data');
     }
 }
