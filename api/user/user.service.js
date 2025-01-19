@@ -10,7 +10,9 @@ export const userService = {
     remove,
     add,
     update,
+    updateLikedGames,
     getEmptyUser,
+    getLikedGames
 }
 
 const PAGE_SIZE = 2
@@ -90,6 +92,52 @@ async function update(user) {
     } catch (err) {
         loggerService.error(`Could not update user`, err)
         throw new Error("Could not update user")
+    }
+}
+
+async function getLikedGames(user){
+    console.log('user:', user)
+    const criteria = { _id: ObjectId.createFromHexString(user._id) }; // Using createFromHexString
+    try {
+        const collection = await dbService.getCollection('user');
+        
+        // Update the user's likedGamesArray to include the boardGame if not already present
+        const result = await collection.findOne( criteria );
+        console.log('result:', result)
+        return result;
+    } catch (err) {
+        loggerService.error(`Could not getLikedGames service`, err);
+        throw new Error("Could not getLikedGames service ");
+    }
+}
+
+async function updateLikedGames( boardGame, user) {
+    const criteria = { _id: ObjectId.createFromHexString(user._id) }; // Using createFromHexString
+    try {
+        const collection = await dbService.getCollection('user');
+        
+        // Update the user's likedGamesArray to include the boardGame if not already present
+        const result = await collection.updateOne(
+            criteria,
+            { $addToSet: { likedGamesArray: boardGame } }
+        );
+
+        // Check if the operation affected any document
+        if (!result.matchedCount) {
+            throw new Error(`No user found with ID: ${user._id}`);
+        }
+
+        if (!result.modifiedCount) {
+            // The game might already exist in the array
+            console.log(`Board game already exists in likedGamesArray for user ${user._id}`);
+        }
+
+        // Fetch and return the updated user document
+        const updatedUser = await collection.findOne(criteria);
+        return updatedUser;
+    } catch (err) {
+        loggerService.error(`Could not updateLikedGames service user`, err);
+        throw new Error("Could not updateLikedGames service user");
     }
 }
 

@@ -16,18 +16,26 @@ export async function getUsers (req, res){
 }
 
 export async function updateUser (req, res) {
-    const {username, fullname } = req.body
-    const userToSave = {
-        username,
-        fullname
-    }
+    const boardGame = req.body
 
     try {
-        const savedUser = await userService.save( userToSave )
+        const savedUser = await userService.update( boardGame )
         res.send(savedUser)
     } catch (error) {
         loggerService.error("could not update user", err)
         return res.status(400).send("could not update user")
+    }
+}
+
+export async function updateUserLikedGames (loggedinUser, bggItem) {
+
+    try {
+        const savedUser = await userService.updateLikedGames( bggItem, loggedinUser )
+        console.log('savedUser:', savedUser)
+        return savedUser
+    } catch (err) {
+        loggerService.error("could not updateUserLikedGames user", err)
+        return res.status(400).send("could not updateUserLikedGames user")
     }
 }
 

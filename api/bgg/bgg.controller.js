@@ -1,6 +1,8 @@
 import { bggApiService } from "../../services/bgg.service.js";
 import { loggerService } from "../../services/logger.service.js";
 import { utilService } from "../../services/util.service.js";
+import { updateUser, updateUserLikedGames } from "../user/user.controller.js";
+import { userService } from "../user/user.service.js";
 import { bggService } from "./bgg.service.js";
 
 export async function getBGGHottest(req, res) {
@@ -13,6 +15,19 @@ export async function getBGGHottest(req, res) {
     } catch (err) {
         loggerService.error("Cannot get BGG Hottest collections", err);
         return res.status(400).send("Cannot get BGG Hottest collections");
+    }
+}
+
+export async function getUserLiked(req, res) {
+    const { loggedinUser } = req;
+
+    try {
+        const likedGamesArray = await userService.getLikedGames( loggedinUser )
+        console.log('likedGamesArray:', likedGamesArray)
+        res.send( likedGamesArray )
+    } catch (err) {
+        loggerService.error("could not getUserLiked ", err)
+        return res.status(400).send("could not getUserLiked ")
     }
 }
 
@@ -82,10 +97,8 @@ export async function getImageById(req, res) {
 
 export async function addBGGItem(req, res) {
     const { loggedinUser, body: bggItem } = req;
-
     try {
-        bggItem.owner = loggedinUser;
-        const savedItem = await bggService.add(bggItem);
+        const savedItem = await updateUserLikedGames(loggedinUser, bggItem);
         res.json(savedItem);
     } catch (err) {
         loggerService.error("Cannot add BGG item", err);
