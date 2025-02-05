@@ -3,13 +3,14 @@
  * cryptr for encrypting and decrypting the mini user cookie, bcrypt for assymetric encrypting, does not decrypt (comparing new value to encrypted value)
  */
 import { loggerService } from "../../services/logger.service.js"
+import { bggService } from "../bgg/bgg.service.js"
 import { authService } from "./auth.service.js"
 
 export async function login(req, res) {
     const { username, password } = req.body
     try {
         const user = await authService.login(username, password)
-        const loginToken = await authService.getLoginToken(user)
+        const loginToken = await authService.getLoginToken({ username, password } )
 
         loggerService.info('User login: ', user)
 
@@ -28,6 +29,9 @@ export async function signup(req, res) {
 
         const account = await authService.signup(username, password, bggUser)
         loggerService.debug(`auth.route (controller) - new account:` + JSON.stringify(account))
+
+        const games = await bggService.signup(username)
+        loggerService.debug(`auth.route (controller) - creating a new games array for user: ${username}`)
 
         const user = await authService.login(username, password)
         loggerService.info(`User signup :`, user)

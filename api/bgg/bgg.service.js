@@ -5,6 +5,8 @@ import { utilService } from "../../services/util.service.js";
 import { msgService } from "../msg/msg.service.js";
 
 export const bggService = {
+    signup,
+    getByUsername,
     query,
     getById,
     remove,
@@ -17,9 +19,46 @@ export const bggService = {
     fetchGameByTitle,
     fetchGameById,
     fetchImageByIds,
+    updateLikedGames,
+    getUserData,
 };
 
 const PAGE_SIZE = 2;
+
+async function signup(username){
+    try {
+        if (!username ) {
+            loggerService.info('Missing username, should have been spotted at frontend')
+            throw 'Missing required signup info for games array'
+        }
+
+        loggerService.debug(`bgg.service - creating games array for username: ${username}`)
+
+        const userExist = await bggService.getByUsername(username)
+        if (userExist) throw 'Username fames array already created'
+
+        const userGameArray = getEmptyUserGamesArray(username)
+        return bggService.add( userGameArray )
+
+    } catch (err) {
+        loggerService.error("Could not create games array", err)
+        throw new Error("Could not sign up games array")
+    }
+}
+
+async function getByUsername(username) {
+    const criteria = { username }
+
+    try {
+        const collection = await dbService.getCollection('game')
+        const user = await collection.findOne(criteria)
+        console.log('user:', user)
+        return user
+    } catch (err) {
+        loggerService.error(`Could not get user by username: ${username}`, err)
+        throw new Error("Could not get user by username")
+    }
+}
 
 async function query(filterBy = { search: '' }) {
     try {
@@ -98,15 +137,17 @@ async function update(bug) {
     }
 }
 
-async function add(bugToSave) {
+async function add(userToSave) {
     try {
-        const collection = await dbService.getCollection('bug');
-        await collection.insertOne(bugToSave);
-        return bugToSave;
+        const collection = await dbService.getCollection('game')
+        await collection.insertOne(userToSave)
+        return userToSave
     } catch (err) {
-        loggerService.error("Could not save bug", err);
-        throw new Error("Could not save bug");
+        loggerService.error(`Could not add user`, err)
+        throw new Error("Could not add user")
+
     }
+    return userToSave
 }
 
 async function addBugNote(bugId, note) {
@@ -243,4 +284,63 @@ function _buildCriteria(filterBy) {
 function _buildSort(filterBy) {
     if (!filterBy.sortBy) return {};
     return { [filterBy.sortBy]: filterBy.sortDir };
+}
+
+function getEmptyUserGamesArray(username) {
+    try {
+        const emptyUserGamesArray = {
+            _id: utilService.makeId(),
+            username,
+            likedGamesArray: [], 
+            superLikedGames: []
+        }
+        return emptyUserGamesArray
+    } catch (err) {
+        loggerService.error(`Could not get empty user games array`, err)
+    }
+}
+
+async function updateLikedGames( boardGame, user) {
+    console.log('username:', user.username)
+    const criteria = { username: user.username }; 
+    try {
+        const collection = await dbService.getCollection('game');
+        
+        // Update the user's likedGamesArray to include the boardGame if not already present
+        const result = await collection.updateOne(
+            criteria,
+            { $addToSet: { likedGamesArray: boardGame } }
+        );
+
+        // Check if the operation affected any document
+        if (!result.matchedCount) {
+            throw new Error(`No user found with username: ${user.username}`);
+        }
+
+        if (!result.modifiedCount) {
+            // The game might already exist in the array
+            console.log(`Board game already exists in likedGamesArray for user ${user.username}`);
+        }
+
+        // Fetch and return the updated user document
+        const updatedUser = await collection.findOne(criteria);
+        return updatedUser;
+    } catch (err) {
+        loggerService.error(`Could not updateLikedGames service user`, err);
+        throw new Error("Could not updateLikedGames service user");
+    }
+}
+
+async function getUserData(user){
+    const criteria = { username: user.username }; 
+    try {
+        loggerService.info('query for the following criteria', criteria);
+
+        const collection = await dbService.getCollection('game');
+        const updatedUser = await collection.findOne(criteria);
+        return updatedUser;
+    } catch (err) {
+        loggerService.error(`Could not get User Data`, err);
+        throw new Error("Could not get User Data");
+    }
 }

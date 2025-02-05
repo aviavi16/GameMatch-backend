@@ -3,19 +3,18 @@ import path from 'path'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { loggerService } from './services/logger.service.js'
-import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
 const app = express()
 
 const coreOptions = {
     origin: [
+        'http://127.0.0.1:3000',
+        'http://localhost:3000',
         'http://127.0.0.1:5173',
         'http://localhost:5173'
     ],
     credentials: true
 }
-
-app.all('*', setupAsyncLocalStorage)
 
 app.use (express.static( 'public' ))
 app.use (express.json())

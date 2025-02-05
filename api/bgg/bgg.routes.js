@@ -1,8 +1,8 @@
 import express from 'express';
 import { 
     getBGGCollection, 
+    addBGGItem,
     getBGGHottest, 
-    addBGGItem, 
     updateBGGItem, 
     removeBGGItem, 
     addBGGNote, 
@@ -11,7 +11,7 @@ import {
     getGameByName,
     addLog,
     getImageById,
-    getUserLiked
+    getUserData
 } from './bgg.controller.js'
 import { requireAuth } from '../../middlewares/require-auth.middleware.js';
 
@@ -19,7 +19,7 @@ const router = express.Router();
 
 // CRUD for BGG items
 router.get('/hottest',  getBGGHottest); // Fetch all collections
-router.get('/liked', requireAuth, getUserLiked); // Fetch all collections
+router.get('/liked', requireAuth, getUserData); // Fetch all collections
 router.get('/log', addLog); // Fetch all collections
 router.get('/search/:gameId', getGameById);
 router.get('/search/image/:gameIds', getImageById);

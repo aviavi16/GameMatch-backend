@@ -27,18 +27,6 @@ export async function updateUser (req, res) {
     }
 }
 
-export async function updateUserLikedGames (loggedinUser, bggItem) {
-
-    try {
-        const savedUser = await userService.updateLikedGames( bggItem, loggedinUser )
-        console.log('savedUser:', savedUser)
-        return savedUser
-    } catch (err) {
-        loggerService.error("could not updateUserLikedGames user", err)
-        return res.status(400).send("could not updateUserLikedGames user")
-    }
-}
-
 export async function addUser  (req, res)  {
     try {
         const { username, password, fullname  } = req.body 

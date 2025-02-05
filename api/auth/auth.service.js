@@ -2,7 +2,6 @@ import Cryptr from "cryptr"
 import { loggerService } from "../../services/logger.service.js"
 import { userService } from "../user/user.service.js"
 import bcrypt from 'bcrypt'
-import { bggApiService } from "../../services/bgg.service.js"
 
 const cryptr = new Cryptr(process.env.SECRET || 'Secret-api-1234')
 
@@ -22,18 +21,12 @@ async function login(username, password) {
         
     const { _id, bggUser} = user
 
-    var ownedGamesByUser = await bggApiService.getOwnedGames(bggUser) 
-    ownedGamesByUser = ownedGamesByUser ? ownedGamesByUser : []
-    var wantedGamesByUser = await bggApiService.getWantedGames(bggUser)
-    wantedGamesByUser = wantedGamesByUser ? wantedGamesByUser : []
     //TODO also check password
 
     const miniUser = {
         _id: _id.toString(),
         username,
         bggUser : bggUser ? bggUser : 'guest',
-        likedGamesArray : wantedGamesByUser,
-        superLikedGames: ownedGamesByUser
     }
     return miniUser
     // } catch (err) {
@@ -57,7 +50,7 @@ async function signup(username, password, bggUser) {
         if (userExist) throw 'Username already taken'
 
         const hash = await bcrypt.hash(password, saltRounds)
-        return userService.add({ username, password: hash, bggUser: bggUser ? bggUser : 'guest', likedGamesArray: [], superLikedGames: [] })
+        return userService.add({ username, password: hash, bggUser: bggUser ? bggUser : 'guest' })
 
     } catch (err) {
         loggerService.error("Could not sign up", err)

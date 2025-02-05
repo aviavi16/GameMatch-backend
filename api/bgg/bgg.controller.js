@@ -1,7 +1,7 @@
 import { bggApiService } from "../../services/bgg.service.js";
 import { loggerService } from "../../services/logger.service.js";
 import { utilService } from "../../services/util.service.js";
-import { updateUser, updateUserLikedGames } from "../user/user.controller.js";
+import { updateUser } from "../user/user.controller.js";
 import { userService } from "../user/user.service.js";
 import { bggService } from "./bgg.service.js";
 
@@ -18,13 +18,13 @@ export async function getBGGHottest(req, res) {
     }
 }
 
-export async function getUserLiked(req, res) {
+export async function getUserData(req, res) {
     const { loggedinUser } = req;
 
     try {
-        const likedGamesArray = await userService.getLikedGames( loggedinUser )
-        console.log('likedGamesArray:', likedGamesArray)
-        res.send( likedGamesArray )
+        const userData = await bggService.getUserData( loggedinUser )
+        console.log('userData:', userData)
+        res.send( userData )
     } catch (err) {
         loggerService.error("could not getUserLiked ", err)
         return res.status(400).send("could not getUserLiked ")
@@ -92,17 +92,6 @@ export async function getImageById(req, res) {
     } catch (err) {
         loggerService.error("Cannot get getImageById", err);
         return res.status(400).send("Cannot get getImageById");
-    }
-}
-
-export async function addBGGItem(req, res) {
-    const { loggedinUser, body: bggItem } = req;
-    try {
-        const savedItem = await updateUserLikedGames(loggedinUser, bggItem);
-        res.json(savedItem);
-    } catch (err) {
-        loggerService.error("Cannot add BGG item", err);
-        return res.status(400).send("Could not add BGG item");
     }
 }
 
@@ -176,5 +165,15 @@ export async function getBGGData(req, res) {
     } catch (error) {
         loggerService.error("Cannot fetch BGG data", error);
         res.status(500).send({ error: error.message });
+    }
+}
+export async function addBGGItem(req, res) {
+    const { loggedinUser, body: bggItem } = req;
+    try {
+        const savedItem = await bggService.updateLikedGames(bggItem, loggedinUser);
+        res.json(savedItem);
+    } catch (err) {
+        loggerService.error("Cannot add BGG item", err);
+        return res.status(400).send("Could not add BGG item");
     }
 }
